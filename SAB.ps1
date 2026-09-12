@@ -18,14 +18,14 @@
     Rename-Item -Path $Backup -NewName $Path
    } else {
     Copy-Item -Path $Path -Destination $Backup
-    $Bytes = Get-Content $Path -Raw -Encoding Byte # Read as ByteStream
+    $Bytes = Get-Content $Path -Raw -AsByteStream # Read as ByteStream
     $String = $Bytes.ForEach('ToString', 'X') -join ' '
 
     # Replace 
     $String = $String -replace '\b48 89 5C 24 8 55 56 57 48 8D AC 24 70 FF FF FF\b(.*)', '67 C7 1 1 0 0 0 B8 1 0 0 0 C3 90 90 90$1'
 
     [byte[]]$ModifiedBytes = -split $String -replace '^', '0x'
-    Set-Content -Path $Path -Value $ModifiedBytes -Encoding Byte # Save as ByteStream
+    Set-Content -Path $Path -Value $ModifiedBytes -AsByteStream # Save as ByteStream
    }
   }
 
